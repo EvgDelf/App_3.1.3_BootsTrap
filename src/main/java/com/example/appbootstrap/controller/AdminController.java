@@ -34,10 +34,8 @@ public class AdminController {
         model.addAttribute("users", usersList);
         model.addAttribute("user", new User());
         model.addAttribute("adminData", adminData);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("role", user.getRole());
+        model.addAttribute("email", adminData.getEmail());
+        model.addAttribute("role", adminData.getRole());
         return "users";
     }
 

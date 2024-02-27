@@ -25,6 +25,7 @@ public class UserController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         model.addAttribute("user", user);
+        model.addAttribute("email", user.getEmail());
         return "user";
     }
 
