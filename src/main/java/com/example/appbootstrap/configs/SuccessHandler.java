@@ -35,10 +35,13 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
 
         if (userDetails.getAuthorities().contains(roleService.findByName("ROLE_ADMIN"))) {
-            response.sendRedirect("/admin");
+            response.sendRedirect("/admin/");
+            return;
         }
         if (userDetails.getAuthorities().contains(roleService.findByName("ROLE_USER"))) {
             response.sendRedirect("/user");
+            return;
         }
+
     }
 }

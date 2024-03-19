@@ -3,7 +3,6 @@ package com.example.appbootstrap.model;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -17,19 +16,15 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+
     private int age;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -62,6 +57,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
     public Long getId() {
         return id;
@@ -110,9 +106,9 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        this.password = bCryptPasswordEncoder.encode(password);
+        this.password = password;
     }
+
     @PostLoad
     public void loadRoles() {
         Hibernate.initialize(roles);
@@ -122,10 +118,6 @@ public class User implements UserDetails {
 
         return roles;
 
-    }
-
-    public String getRole() {
-        return getRoles().get(0).getName();
     }
 
     public void setRoles(List<Role> roles) {

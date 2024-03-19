@@ -54,7 +54,11 @@
             <td th:text="${user.lastName}"></td>
             <td th:text="${user.age}"></td>
             <td th:text="${user.email}"></td>
-            <td th:text="${user.getRole().toString()}"></td>
+            <td>
+                                    <span th:each="role : ${user.getRoles()}">
+                                        <span th:text="${role.getName().replace('ROLE_','')}"></span>
+                                    </span>
+            </td>
         </tbody>
     </table>
 </div>

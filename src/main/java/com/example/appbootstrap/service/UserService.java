@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +22,16 @@ import java.util.stream.Stream;
 @Service
 public class UserService implements UserDetailsService {
 
-
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findByUsername(String userName) {
@@ -60,13 +62,12 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void registerUser(User user) {
-        Role userRole = roleRepository.findByName("ROLE_USER");
-        user.setRoles(Stream.of(userRole).collect(Collectors.toList()));
-        userRepository.save(user);
+        save(user);
     }
 
     @Transactional
     public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
